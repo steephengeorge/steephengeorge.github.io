@@ -8,7 +8,7 @@ permalink: /about/
 I was born and brought up in a small beautiful village
 called Krishnankotta, Kerala, India surrounded by backwater. 
 We used to cross a river and walk miles every day to school. 
-Some days high waves in the backwater wet our shorts on the 
+Some days high waves in the river wet our shorts on the 
 way, heavy rain shatters our umbrella. During summer days, 
 we played cricket and soccer.
 
