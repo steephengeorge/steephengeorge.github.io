@@ -1,0 +1,115 @@
+I"p<p><strong>What should go within a configuration file?</strong></p>
+<p>
+<div align="justify">
+All computer applications need a context for execution. A set of
+environment variables provides the execution context. That may be
+sufficient; even then it may not be a good idea to pollute the operating
+system with environment variables. If we planned to set up multiple
+applications in the same operating system, it will be a mess at a later
+point in time. Or even in the case, a single application has multiple
+processes, we will end up with the same concerns without much delay.
+What will be the maintenance complexity, technical debt if we have
+multiple applications and each has a bunch of processes as part of it?
+</div>
+</p>
+<p>
+<div align="justify">
+This is not at all a new problem. Most of us never thought about this
+issue, because we usually keep all environment dependencies in a flat
+file and call it a configuration file. So, after we installed the
+application, we will change the configuration file to set up the
+environment details and restart the server. Or we can keep the
+environment-specific parameters that can keep it in an environment file
+so we can find all those in one location. That was the case even in
+older times when infrastructure became code, tools like Ansible or
+Kubernetes automate and enabled versioning these configuration changes
+during the installation process. Obviously, you can write an interactive
+Bash script or Python script and automate the configuration as part of
+installation also; even that is possible with a separate Ansible
+playbook for configuration other than installation.
+</div>
+</p>
+<p>
+<div align="justify">
+In enterprise environments I have seen, even a single application
+depends on multiple configuration files without specifying the
+separation of concerns in between them. In a long-standing of 13-15
+years, this drama evolves into a total mess.
+</div>
+</p>
+<p>
+<div align="justify">
+Now we have a configuration file in hand for every application or every
+process as you prefer. In the Java world, it is common to call a
+configuration file a properties file. And every process or service keeps
+its configuration file. Are we only keeping environment details within
+configuration files? Yes, most probably; but it may be more than just
+application execution context.
+</div>
+</p>
+<p>
+<div align="justify">
+Now configuration file is not only a tool to keep separation of concern
+of execution context. It is moreover an interface of our application. We
+can keep some fine-tuning, performance tuning options within a
+configuration file. In case if we need performance tuning, we don\'t
+need to make any code changes, recompilation, or packaging. Yes, our
+application is ready to adapt to those kinds of changes; and that is an
+option great to have.
+</div>
+</p>
+<p>
+<div align="justify">
+I prefer to draw a fine line here; if the application maintainer is
+allowed to modify the configuration file, it is good to keep it there.
+If she/he is not supposed to make a change, better to keep it is not
+accessible for her/him. It is better to keep out of the configuration
+file.
+</div>
+</p>
+<p>
+<div align="justify">
+As part of the Agile application building strategy to build a minimum
+viable product (MVP), it is not rare to see, flooding configuration file
+with business logic dependent details. Sometimes those features may not
+evolve further and live forever as part of the configuration file. This
+is an antipattern and may cause further issues over time. Since it is
+easily accessible for the application maintainer, he can modify those
+business dependent parameters and may cause difficult issues during
+application execution to figure it out.
+</div>
+</p>
+<p>
+<div align="justify">
+Can I keep a static list of string literals within configuration files
+for some business logic implementation? You can, but you are breaking
+the fine line. Will your application behaves the same as before, in case
+the application maintainer creates a typo in those string literals? If
+the answer is NO, better to keep out of reach of an application
+maintainer. Please don\'t misunderstand me? I am not advocating hard
+code those String literals within code either.
+</div>
+</p>
+<p>
+<div align="justify">
+In case if you can oversee, the list of String literals may grow; better
+to keep the database in a static table and restrict the access to the
+table rather than polluting your configuration file. And load it into
+the application cache as part of application start-up and
+initialization. It may help you to avoid getting a midnight call from an
+application maintainer or a deployment engineer. Another option is to
+keep that within a flat-file as part of the application package but not
+present in an externalized configuration file.
+</div>
+</p>
+<p>
+<div align="justify">
+Another good option, diligent care, and thought upfront while
+externalizing the properties from internal application configurations. I
+even recommend handpicking the parameters; we would like to share it
+with the application maintainer. In a way, we are knowingly creating two
+versions of the same configuration file for the same application, one
+for the developer and another for the application maintainer.
+</div>
+</p>
+:ET
