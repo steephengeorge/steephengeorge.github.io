@@ -12,7 +12,7 @@ like WebAssembly, Javascript, Ruby, Python, and R; LLVM supported
 languages like C, C++, and Rust. And on top of interoperability, it
 provides a high-performance platform for execution. GraalVM has several
 patented Just In Time performance optimization capabilities.'
-project_link: 'http://steephengeorge.github.com/graalvm/2020/06/14/introduction_graalVm.html'
+project_link: 'http://steephengeorge.github.com/graalvm/2020/06/14/introduction_graalvm.html'
 ---
 # An Introduction to GraalVM
 
