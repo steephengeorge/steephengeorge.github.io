@@ -5,7 +5,7 @@ title: An Intoroduction to GraalVM
 date: 2020-06-14 14:15:00
 categories: GraalVM
 tags: Software Java GraalVM
-featured_image: '/img/posts/graalVM-architecture.png'
+featured_image: '/img/posts/graalvm-Java.png'
 lead_text: 'GraalVm is a polyglot VM engine built using Java. It provides an
 interoperability runtime environment with JVM languages; guest languages
 like WebAssembly, Javascript, Ruby, Python, and R; LLVM supported
