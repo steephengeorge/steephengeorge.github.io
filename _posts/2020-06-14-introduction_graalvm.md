@@ -5,14 +5,14 @@ title: An Intoroduction to GraalVM
 date: 2020-06-14 14:15:00
 categories: GraalVM
 tags: Software Java GraalVM
-featured_image: '/img/posts/graalvm-Java.png'
+featured_image: '/img/posts/graalvm-Java.PNG'
 lead_text: 'GraalVm is a polyglot VM engine built using Java. It provides an
 interoperability runtime environment with JVM languages; guest languages
 like WebAssembly, Javascript, Ruby, Python, and R; LLVM supported
 languages like C, C++, and Rust. And on top of interoperability, it
 provides a high-performance platform for execution. GraalVM has several
 patented Just In Time performance optimization capabilities.'
-project_link: 'http://steephengeorge.github.com/graalvm/2020/06/14/introduction_graalVm.html'
+project_link: 'http://steephengeorge.github.com/graalvm/2020/06/14/introduction_graalvm.html'
 ---
 # An Introduction to GraalVM
 
@@ -38,7 +38,7 @@ GraalVm documentation provides detailed steps to set up with IntelliJ IDE. If yo
 
 ## Set up GralVM with Eclipse
 
-1. Download the GraalVM community edition package from the [Github](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-20.3.0)repository depends on your operating system.
+1. Download the GraalVM community edition package from the [Github](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-20.3.0) repository depends on your operating system.
 2. Unzip and untar to your local directory. Ex: C:/Tools/graalVm
 3. Set environment variable JAVA\_HOME and append the JAVA\_HOME to the PATH variable. Ex: JAVA\_HOME=C:/Tools/graalVm/bin and PATH= $PATH:$JAVA\_HOME
 4. Create a new java project in Eclipse
