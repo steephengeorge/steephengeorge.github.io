@@ -1,6 +1,6 @@
 ---
 layout: inner
-position: left
+position: right
 title: An Intoroduction to GraalVM
 date: 2020-06-14 14:15:00
 categories: GraalVM
