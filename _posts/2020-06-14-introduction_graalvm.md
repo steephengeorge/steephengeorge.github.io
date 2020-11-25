@@ -47,7 +47,7 @@ GraalVm documentation provides detailed steps to set up with IntelliJ IDE. If yo
 - Now you will see the 'JRE System Library' listed below. Select it.
 - On the right pan, press the button 'Edit'. It will pop up next window.
 
-![graalvm_eclipse_1](/img/posts/graalvm_eclipse_1.PNG)
+![graalvm_eclipse_1](/img/posts/graalvm_eclipse_1.png)
 
 - Press the button 'Installed JREs'. It will pop up next window
 - Press the button 'Add' and from the pop-up window select the 'Standard VM'
