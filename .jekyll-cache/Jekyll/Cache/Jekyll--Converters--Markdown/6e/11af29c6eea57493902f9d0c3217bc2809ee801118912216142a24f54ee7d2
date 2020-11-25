@@ -1,0 +1,73 @@
+I"�<h1 id="an-introduction-to-graalvm">An Introduction to GraalVM</h1>
+
+<p>GraalVm is a polyglot ‘VM’ engine built using Java. It provides an interoperability runtime environment with JVM languages; guest languages like WebAssembly, Javascript, Ruby, Python, and R; LLVM supported languages like C, C++, and Rust. And on top of interoperability, it provides a high-performance platform for execution. GraalVM has several patented Just In Time performance optimization capabilities.</p>
+
+<h2 id="runtime-environments">Runtime Environments</h2>
+
+<p>GraalVM provides multiple runtime options:</p>
+
+<ul>
+  <li>Java Hotspot VM with the GraalVM compiler enabled</li>
+  <li>js runtime environment</li>
+  <li>LLVM runtime environment</li>
+</ul>
+
+<h2 id="graalvm-architecture">GraalVM Architecture</h2>
+
+<p><img src="/img/posts/graalvm-architecture.PNG" alt="GraalVM Architecture" /></p>
+
+<p>GraalVM provides a Language implementation framework known as Tuffle, and it is an open-source library. It provides a mechanism to create language interpreters for GraalVM by generating a self-modifying Abstract Syntax Tree(AST) for guest languages. Hot paths in ASTs are optimized by GraalVM during the compilation process using JIT.</p>
+
+<p>In the case of LLVM supported languages, they are usually statically compiled. GraalVM provides a tool <code class="language-plaintext highlighter-rouge">lli</code> that first interprets the program and later compiles it with GraalVM to optimize the hot path.</p>
+
+<p>Let’s make our hands dirty now.</p>
+
+<p>GraalVm documentation provides detailed steps to set up with IntelliJ IDE. If you prefer to use IntelliJ use this <a href="https://www.graalvm.org/guides/#run-java-applications-on-graalvm-from-an-ide">guide</a>.</p>
+
+<h2 id="set-up-gralvm-with-eclipse">Set up GralVM with Eclipse</h2>
+
+<ul>
+  <li>Download the GraalVM community edition package from the <a href="https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-20.3.0">Github</a>repository depends on your operating system.</li>
+  <li>Unzip and untar to your local directory. Ex: C:/Tools/graalVm</li>
+  <li>Set environment variable JAVA_HOME and append the JAVA_HOME to the PATH variable. Ex: JAVA_HOME=C:/Tools/graalVm/bin and PATH= $PATH:$JAVA_HOME</li>
+  <li>Create a new java project in Eclipse</li>
+  <li>Right-click on the project and go to properties</li>
+  <li>From the left pan, double click ‘Build path’</li>
+  <li>From the right pan, select the tab ‘Libraries’</li>
+  <li>Now you will see the ‘JRE System Library’ listed below. Select it.</li>
+  <li>On the right pan, press the button ‘Edit’. It will pop up next window.</li>
+</ul>
+
+<p><img src="/img/posts/graalvm_eclipse_1.PNG" alt="graalvm_eclipse_1" /></p>
+
+<ul>
+  <li>Press the button ‘Installed JREs’. It will pop up next window</li>
+  <li>Press the button ‘Add’ and from the pop-up window select the ‘Standard VM’</li>
+</ul>
+
+<p><img src="/img/posts/graalvm_eclipse_2.PNG" alt="graalvm_eclipse_2" /></p>
+
+<p><img src="/img/posts/graalvm_eclipse_3.PNG" alt="graalvm_eclipse_3" /></p>
+
+<ul>
+  <li>In the next pop-up window, press the button ‘Directory’ to browse and choose the GraalVM home directory. Ex: C:\Tools\graalvm</li>
+</ul>
+
+<p><img src="/img/posts/graalvm_eclipse_4.PNG" alt="graalvm_eclipse_4" /></p>
+
+<ul>
+  <li>Press button Finish</li>
+  <li>From the ‘Installed JREs’ window, choose the newly added GraalVM as our JRE for this project and press the button ‘Apply and Close’.</li>
+  <li>In the next pending opened window press the buttons Finish</li>
+  <li>Hope now you are back to properties windows for your project. Select Java compiler from the left pane.</li>
+  <li>On the right pan, against ‘the compiler compliance level’ chooses the matching Java version from the drop-down box.</li>
+</ul>
+
+<p><img src="/img/posts/graalvm_eclipse_5.PNG" alt="graalvm_eclipse_5" /></p>
+
+<ul>
+  <li>Now you are all set, press the button ‘Apply and Close’</li>
+</ul>
+
+<p>Now we can write our first java program using GraalVM. Happy coding!!</p>
+:ET
