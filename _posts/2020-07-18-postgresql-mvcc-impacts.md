@@ -11,7 +11,7 @@ That confirms there is no system-wide issue. While researching, you narrow down 
 One possible doubt, is the index corrupted? Analyze the indexes of all the tables part of the SQL query. 
 Did we miss any index to deploy? Did we place the conditional columns in an appropriate order to enhance the performance? 
 Is there any deadlock scenario behind the scene? None of them poped up...'
-project_link: 'http://localhost:4000/databases/postgresql/2020/07/18/postgresql-mvcc-impacts.html'
+project_link: 'http://steephengeorge.github.io/databases/postgresql/2020/07/18/postgresql-mvcc-impacts.html'
 
 ---
 
