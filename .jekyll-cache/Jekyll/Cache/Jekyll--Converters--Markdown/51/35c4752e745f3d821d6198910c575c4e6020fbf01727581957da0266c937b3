@@ -1,21 +1,5 @@
----
-layout: inner
-position: center
-title: 'Integrating, Applications using Domain Language'
-date: 2019-07-23 15:15:00
-categories: Software Design
-tags: Software Architecture Configuration
-lead_text: 'Integrating domain language processing systems with external systems
-will be a challenge. We have two options in hand. Either build a tightly
-coupled layer in the external system which enables the communication. In
-another way, being arrogant and command, if you want to communicate with
-me learn my language...'
-project_link: 'http://localhost:4000/software/design/2019/07/23/application-integration.html'
-
----
-
-# Integrating, Applications using Domain Language
-![application_integration](/img/posts/integration-1280-853.jpg)
+I"k<h1 id="integrating-applications-using-domain-language">Integrating, Applications using Domain Language</h1>
+<p><img src="/img/posts/integration-1280-853.jpg" alt="application_integration" /></p>
 <p>
 <div align="justify">
 Application integration is a challenge. It will be a great challenge if
@@ -28,7 +12,7 @@ help you to get a realization as early as possible. Let us go through
 each of them one by one.
 </div>
 </p>
-**Scan code**
+<p><strong>Scan code</strong></p>
 <p>
 <div align="justify">
 Read it through buddy!!! You can become an archeological nerd while
@@ -50,7 +34,7 @@ tradeoffs engineers applied during the implementations. Why did they
 choose this route rather than other multiple possible routes?
 </div>
 </p>
-**Read documentation**
+<p><strong>Read documentation</strong></p>
 <p>
 <div align="justify">
 Lol, read the documentation. You can find out UML diagrams, sequence
@@ -70,7 +54,7 @@ system design document once again. Everything is there. If you want this
 data, do it my way, that is the highway.
 </div>
 </p>
-**Interact with an old hat**
+<p><strong>Interact with an old hat</strong></p>
 <p>
 <div align="justify">
 
@@ -96,7 +80,7 @@ darkest corners.
 </div>
 </p>
 
-**Identify data**
+<p><strong>Identify data</strong></p>
 <p>
 <div align="justify">
 In a nutshell, every application, receiving the input data, massaging
@@ -144,3 +128,4 @@ request over web service and pass data through messaging systems will
 work.
 </div>
 </p>
+:ET
