@@ -17,7 +17,7 @@ project_link: 'http://steephengeorge.github.io/databases/postgresql/2020/07/18/p
 
 # PostgreSQL: Multi-Version Concurrency Control and its impacts
 
-![Postgresql_mvcc](/img/posts/postgresql_MVCC.jpg)
+![Postgresql_mvcc](/img/posts/PostgreSQL_MVCC.jpg)
 
 Relational databases follow the ACID Guarantee. ACID stands for:
 

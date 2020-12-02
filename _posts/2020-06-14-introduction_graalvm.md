@@ -36,7 +36,7 @@ Let's make our hands dirty now.
 
 GraalVm documentation provides detailed steps to set up with IntelliJ IDE. If you prefer to use IntelliJ use this [guide](https://www.graalvm.org/guides/#run-java-applications-on-graalvm-from-an-ide).
 
-## Set up GralVM with Eclipse
+## Set up GraalVM with Eclipse
 
 - Download the GraalVM community edition package from the [Github](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-20.3.0)repository depends on your operating system.
 - Unzip and untar to your local directory. Ex: C:/Tools/graalVm
