@@ -1,4 +1,4 @@
-I"Ô/<h1 id="be-careful-while-choosing-an-application-port">Be careful while choosing an application port!!!</h1>
+I"Å/<h1 id="be-careful-while-choosing-an-application-port">Be careful while choosing an application port!!!</h1>
 
 <p><img src="/img/posts/broken_ethernet_cable.jpg" alt="application_integration" /></p>
 
@@ -96,10 +96,10 @@ In the case of the Windows Operating System do these 2 steps:
 2
 3
 4
-</pre></td><td class="code"><pre><span class="w">	</span><span class="nf">netstat</span><span class="w"> </span><span class="nf">-</span><span class="w"> </span><span class="nx">aon</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nf">findstr</span><span class="w"> </span><span class="err">&lt;</span><span class="nx">port</span><span class="w"> </span><span class="nx">number</span><span class="err">&gt;</span><span class="w">
-	</span><span class="nf">Ex:</span><span class="w"> </span><span class="nx">netstat</span><span class="w"> </span><span class="nt">-aon</span><span class="w"> </span><span class="nx">\</span><span class="o">|</span><span class="w"> </span><span class="nf">findstr</span><span class="w"> </span><span class="nx">443</span><span class="w">
-	</span><span class="nf">taskkill</span><span class="w"> </span><span class="nx">/F</span><span class="w"> </span><span class="nx">/PID</span><span class="w"> </span><span class="nx">\</span><span class="err">&lt;</span><span class="nx">PID\</span><span class="err">&gt;</span><span class="w">
-	</span><span class="nf">Ex:</span><span class="w"> </span><span class="nx">taskkill</span><span class="w"> </span><span class="nx">/F</span><span class="w"> </span><span class="nx">/PID</span><span class="w"> </span><span class="nx">4452</span>
+</pre></td><td class="code"><pre><span class="w">	</span><span class="n">netstat</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">aon</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">findstr</span><span class="w"> </span><span class="err">&lt;</span><span class="nx">port</span><span class="w"> </span><span class="nx">number</span><span class="err">&gt;</span><span class="w">
+	</span><span class="n">Ex:</span><span class="w"> </span><span class="nx">netstat</span><span class="w"> </span><span class="nt">-aon</span><span class="w"> </span><span class="nx">\</span><span class="o">|</span><span class="w"> </span><span class="n">findstr</span><span class="w"> </span><span class="nx">443</span><span class="w">
+	</span><span class="n">taskkill</span><span class="w"> </span><span class="nx">/F</span><span class="w"> </span><span class="nx">/PID</span><span class="w"> </span><span class="nx">\</span><span class="err">&lt;</span><span class="nx">PID\</span><span class="err">&gt;</span><span class="w">
+	</span><span class="n">Ex:</span><span class="w"> </span><span class="nx">taskkill</span><span class="w"> </span><span class="nx">/F</span><span class="w"> </span><span class="nx">/PID</span><span class="w"> </span><span class="nx">4452</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
 
@@ -110,10 +110,10 @@ In a similar way, for the Linux Operating system do these 2 steps:
 2
 3
 4
-</pre></td><td class="code"><pre><span class="w">	</span><span class="nf">netstat</span><span class="w"> </span><span class="nt">-aon</span><span class="w"> </span><span class="nx">\</span><span class="o">|</span><span class="w"> </span><span class="nf">grep</span><span class="w"> </span><span class="nx">\</span><span class="err">&lt;</span><span class="nx">port</span><span class="w"> </span><span class="nx">number\</span><span class="err">&gt;</span><span class="w">
-	</span><span class="nf">Ex:</span><span class="w"> </span><span class="nx">netstat</span><span class="w"> </span><span class="nt">-aon</span><span class="w"> </span><span class="nx">\</span><span class="o">|</span><span class="w"> </span><span class="nf">grep</span><span class="w"> </span><span class="nx">443</span><span class="w">
-	</span><span class="nf">kill</span><span class="w"> </span><span class="nt">-9</span><span class="w"> </span><span class="nx">\</span><span class="err">&lt;</span><span class="nx">PID\</span><span class="err">&gt;</span><span class="w">
-	</span><span class="nf">Ex:</span><span class="w"> </span><span class="nx">kill</span><span class="w"> </span><span class="nt">-9</span><span class="w"> </span><span class="nx">443</span>
+</pre></td><td class="code"><pre><span class="w">	</span><span class="n">netstat</span><span class="w"> </span><span class="nt">-aon</span><span class="w"> </span><span class="nx">\</span><span class="o">|</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="nx">\</span><span class="err">&lt;</span><span class="nx">port</span><span class="w"> </span><span class="nx">number\</span><span class="err">&gt;</span><span class="w">
+	</span><span class="n">Ex:</span><span class="w"> </span><span class="nx">netstat</span><span class="w"> </span><span class="nt">-aon</span><span class="w"> </span><span class="nx">\</span><span class="o">|</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="nx">443</span><span class="w">
+	</span><span class="n">kill</span><span class="w"> </span><span class="nt">-9</span><span class="w"> </span><span class="nx">\</span><span class="err">&lt;</span><span class="nx">PID\</span><span class="err">&gt;</span><span class="w">
+	</span><span class="n">Ex:</span><span class="w"> </span><span class="nx">kill</span><span class="w"> </span><span class="nt">-9</span><span class="w"> </span><span class="nx">443</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
 <p>
@@ -242,7 +242,7 @@ with the specified range.
 
 
 <figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
-</pre></td><td class="code"><pre><span class="nf">Ex:</span><span class="w"> </span><span class="nx">net.ipv4.ip_local_port_range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9000</span><span class="w"> </span><span class="mi">65500</span>
+</pre></td><td class="code"><pre><span class="n">Ex:</span><span class="w"> </span><span class="nx">net.ipv4.ip_local_port_range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9000</span><span class="w"> </span><span class="mi">65500</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
 
@@ -252,7 +252,7 @@ If you don't prefer to reboot the server and would like to update the
 new settings in the runtime environment, execute the following command:
 
 <figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
-</pre></td><td class="code"><pre><span class="nf">sysctl</span><span class="w"> </span><span class="nt">-p</span><span class="w"> </span><span class="nx">/etc/sysctl.conf</span>
+</pre></td><td class="code"><pre><span class="n">sysctl</span><span class="w"> </span><span class="nt">-p</span><span class="w"> </span><span class="nx">/etc/sysctl.conf</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
 </div>

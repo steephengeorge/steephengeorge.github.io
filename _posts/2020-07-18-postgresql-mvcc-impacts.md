@@ -17,7 +17,7 @@ project_link: 'http://steephengeorge.github.io/databases/postgresql/2020/07/18/p
 
 # PostgreSQL: Multi-Version Concurrency Control and its impacts
 
-![Postgresql_mvcc](/img/posts/PostgreSQL_MVCC.jpg)
+![Postgresql_mvcc](/img/posts/postgresql_MVCC.jpg)
 
 Relational databases follow the ACID Guarantee. ACID stands for:
 
@@ -48,10 +48,12 @@ PostgreSQL provides a bunch of configuration parameters to fine-tune the autovac
 
 Let me introduce some of the parameters for autovacuum fine-tuning here with an example. Assume you have a table with thousands of records. You set the configuration parameters as follows. Let's consider how does it work in this case.
 
+{% highlight sql %}
 _autovacuum\_vacuum\_threshold = 100_
 
 _autovacuum\_vacuum\_scale\_factor = 0.3_
 
+{% endhighlight %}
 The count of obsolete records within your table reaches _100+ (0.3 \* 1000)_, the autovacuum execution will trigger.
 
 Yes, we are all set. Everything is going well.
@@ -72,6 +74,7 @@ On further investigation, it was quite evident why system-level autovacuum confi
 
 You can use the same set of autovacuum parameters with specific values to set the tablewise autovacuum.
 
+{% highlight sql %}
 _Ex:_
 
 _ALTER TABLE employee SET (autovacuum\_vacuum\_scale\_factor = 0.1, autovacuum\_vacuum\_threshold = 20);_
@@ -87,3 +90,5 @@ _--------------------_
 _autovacuum\_vacuum\_scale\_factor = 0.1_
 
 _autovacuum\_vacuum\_threshold = 20_
+
+{% endhighlight %}

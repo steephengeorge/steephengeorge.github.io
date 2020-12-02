@@ -1,6 +1,6 @@
-I"�<h1 id="postgresql-multi-version-concurrency-control-and-its-impacts">PostgreSQL: Multi-Version Concurrency Control and its impacts</h1>
+I"�"<h1 id="postgresql-multi-version-concurrency-control-and-its-impacts">PostgreSQL: Multi-Version Concurrency Control and its impacts</h1>
 
-<p><img src="/img/posts/postgresql_mvcc.PNG" alt="Postgresql_mvcc" /></p>
+<p><img src="/img/posts/postgresql_MVCC.jpg" alt="Postgresql_mvcc" /></p>
 
 <p>Relational databases follow the ACID Guarantee. ACID stands for:</p>
 
@@ -33,9 +33,9 @@
 
 <p>Let me introduce some of the parameters for autovacuum fine-tuning here with an example. Assume you have a table with thousands of records. You set the configuration parameters as follows. Let’s consider how does it work in this case.</p>
 
-<p><em>autovacuum_vacuum_threshold = 100</em></p>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">_autovacuum</span><span class="err">\</span><span class="n">_vacuum</span><span class="err">\</span><span class="n">_threshold</span> <span class="o">=</span> <span class="mi">100</span><span class="n">_</span>
 
-<p><em>autovacuum_vacuum_scale_factor = 0.3</em></p>
+<span class="n">_autovacuum</span><span class="err">\</span><span class="n">_vacuum</span><span class="err">\</span><span class="n">_scale</span><span class="err">\</span><span class="n">_factor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span><span class="n">_</span></code></pre></figure>
 
 <p>The count of obsolete records within your table reaches <em>100+ (0.3 * 1000)</em>, the autovacuum execution will trigger.</p>
 
@@ -57,19 +57,19 @@
 
 <p>You can use the same set of autovacuum parameters with specific values to set the tablewise autovacuum.</p>
 
-<p><em>Ex:</em></p>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">_Ex</span><span class="p">:</span><span class="n">_</span>
 
-<p><em>ALTER TABLE employee SET (autovacuum_vacuum_scale_factor = 0.1, autovacuum_vacuum_threshold = 20);</em></p>
+<span class="n">_ALTER</span> <span class="k">TABLE</span> <span class="n">employee</span> <span class="k">SET</span> <span class="p">(</span><span class="n">autovacuum</span><span class="err">\</span><span class="n">_vacuum</span><span class="err">\</span><span class="n">_scale</span><span class="err">\</span><span class="n">_factor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">autovacuum</span><span class="err">\</span><span class="n">_vacuum</span><span class="err">\</span><span class="n">_threshold</span> <span class="o">=</span> <span class="mi">20</span><span class="p">);</span><span class="n">_</span>
 
-<p>To verify the changes use following query:</p>
+<span class="k">To</span> <span class="n">verify</span> <span class="n">the</span> <span class="n">changes</span> <span class="n">use</span> <span class="n">following</span> <span class="n">query</span><span class="p">:</span>
 
-<p><em>select pg_options_to_table(reloptions) from pg_class where relname=’employee ‘ ;</em></p>
+<span class="n">_select</span> <span class="n">pg</span><span class="err">\</span><span class="n">_options</span><span class="err">\</span><span class="n">_to</span><span class="err">\</span><span class="n">_table</span><span class="p">(</span><span class="n">reloptions</span><span class="p">)</span> <span class="k">from</span> <span class="n">pg</span><span class="err">\</span><span class="n">_class</span> <span class="k">where</span> <span class="n">relname</span><span class="o">=</span><span class="s1">'employee '</span> <span class="p">;</span><span class="n">_</span>
 
-<p><em>pg_options_to_table</em></p>
+<span class="n">_pg</span><span class="err">\</span><span class="n">_options</span><span class="err">\</span><span class="n">_to</span><span class="err">\</span><span class="n">_table_</span>
 
-<p><em>——————–</em></p>
+<span class="n">_</span><span class="c1">--------------------_</span>
 
-<p><em>autovacuum_vacuum_scale_factor = 0.1</em></p>
+<span class="n">_autovacuum</span><span class="err">\</span><span class="n">_vacuum</span><span class="err">\</span><span class="n">_scale</span><span class="err">\</span><span class="n">_factor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="n">_</span>
 
-<p><em>autovacuum_vacuum_threshold = 20</em></p>
+<span class="n">_autovacuum</span><span class="err">\</span><span class="n">_vacuum</span><span class="err">\</span><span class="n">_threshold</span> <span class="o">=</span> <span class="mi">20</span><span class="n">_</span></code></pre></figure>
 :ET

@@ -24,6 +24,9 @@ linkedin_username: 'skallarakkal'
 
 # Build settings
 markdown: kramdown
+highlighter: rouge
+kramdown:
+      input: GFM
 # theme: phantom # Uncomment once published to RubyGems
 plugins:
   - jekyll-paginate
