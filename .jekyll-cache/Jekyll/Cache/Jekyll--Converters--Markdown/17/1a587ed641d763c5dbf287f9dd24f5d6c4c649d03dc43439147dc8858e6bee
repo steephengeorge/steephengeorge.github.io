@@ -1,0 +1,11 @@
+I"U<h1 id="postgresql-multi-version-concurrency-control-and-its-impacts">PostgreSQL: Multi-Version Concurrency Control and its impacts</h1>
+
+<p>Relational databases follow the ACID Guarantee. ACID stands for:</p>
+
+<ul>
+  <li>Atomicity: A transaction considers as a single unit irrespective of actions within a transaction.</li>
+  <li>Consistency: Transaction changes database from a valid state to another.</li>
+  <li>Isolation: The impact of concurrent transactions would be the same as they execute sequentially.</li>
+  <li>Durability: Committed transactions saved in permanent storage.</li>
+</ul>
+:ET
