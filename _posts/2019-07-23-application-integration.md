@@ -10,7 +10,7 @@ will be a challenge. We have two options in hand. Either build a tightly
 coupled layer in the external system which enables the communication. In
 another way, being arrogant and command, if you want to communicate with
 me learn my language...'
-project_link: 'http://localhost:4000/software/design/2019/07/23/application-integration.html'
+project_link: 'http://steephengeorge.github.io/software/design/2019/07/23/application-integration.html'
 
 ---
 
