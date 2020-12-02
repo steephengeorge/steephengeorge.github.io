@@ -1,11 +1,10 @@
 ---
 layout: inner
-position: left
+position: center
 title: 'Integrating, Applications using Domain Language'
 date: 2019-07-23 15:15:00
 categories: Software Design
 tags: Software Architecture Configuration
-featured_image: '/img/posts/integration-1280-853.jpg'
 lead_text: 'Integrating domain language processing systems with external systems
 will be a challenge. We have two options in hand. Either build a tightly
 coupled layer in the external system which enables the communication. In
@@ -16,7 +15,7 @@ project_link: 'http://steephengeorge.github.io/software/design/2019/07/23/applic
 ---
 
 **Integrating, Applications using Domain Language**
-
+![application_integration](/img/posts/integration-1280-853.jpg)
 <p>
 <div align="justify">
 Application integration is a challenge. It will be a great challenge if

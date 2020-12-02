@@ -1,11 +1,10 @@
 ---
 layout: inner
-position: right
+position: center
 title: 'What should go within a config. file?'
 date: 2019-02-20 14:15:00
 categories: Software Design
 tags: Software Architecture Configuration
-featured_image: '/img/posts/configuration.png'
 lead_text: 'As part of the Agile application building strategy to build a minimum
 viable product (MVP), it is not rare to see, flooding configuration file
 with business logic dependent details. Sometimes those features may not
@@ -14,6 +13,9 @@ project_link: 'http://steephengeorge.github.io/software/design/2019/02/20/config
 
 ---
 **What should go within a configuration file?**
+
+![config file](/img/posts/configuration.png)
+
 <p>
 <div align="justify">
 All computer applications need a context for execution. A set of

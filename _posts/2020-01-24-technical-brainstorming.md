@@ -1,11 +1,10 @@
 ---
 layout: inner
-position: right
+position: center
 title: 'How to Lead Technical Brainstorming?'
 date: 2020-01-24 15:15:00
 categories: Software leadership
 tags: Software Architecture Leadership
-featured_image: '/img/posts/brainstorming-3500-2475.jpg'
 lead_text: 'If a discussion is not moving in the proper direction and end up in a
 time-consuming process, one possible reason for that is the complexity
 of the problem at hand. In that scenario, the intuitive thought process
@@ -17,6 +16,7 @@ project_link: 'http://steephengeorge.github.io/software/leadership/2020/01/24/te
 
 ### How to Lead Technical Brainstorming?
 
+![application_integration](/img/posts/brainstorming-3500-2475.jpg)
 
 <p>
 <div align="justify">
