@@ -1,0 +1,77 @@
+I"V<h1 id="postgresql-multi-version-concurrency-control-and-its-impacts">PostgreSQL: Multi-Version Concurrency Control and its impacts</h1>
+
+<p><img src="/img/posts/PostgreSQL_MVCC.jpg" alt="Postgresql_mvcc" /></p>
+
+<p>Relational databases follow the ACID Guarantee. ACID stands for:</p>
+
+<ul>
+  <li>Atomicity: A transaction considers as a single unit irrespective of actions within a transaction.</li>
+  <li>Consistency: Transaction changes database from a valid state to another.</li>
+  <li>Isolation: The impact of concurrent transactions would be the same as they execute sequentially.</li>
+  <li>Durability: Committed transactions saved in permanent storage.</li>
+</ul>
+
+<p>Relational databases use different strategies to manage concurrent transactions to maintain ACID guarantees. Most of them use the lock on a table or a row of records. PostgreSQL is different here. It uses a Multi-Version Concurrency Control (MVCC). In the case of MVCC, locks on reading will not impact the one on writing. Each transaction works on a snapshot of the data set at the time of execution. So if there are concurrent read and write transactions, PostgreSQL maintains two versions of data to avoid a deadlock scenario. That means each UPDATE and DELETE operations generate different versions of the same data.</p>
+
+<h2 id="data-version-management">Data version management</h2>
+
+<p>Now you may have a question? If PostgreSQL keeps multiple versions of the same data over UPDATE or DELETE, how is it managing its bookkeeping up to date and provides consistency? It means every UPDATE and DELETE are soft-operations within PostgreSQL. They are going to generate a lot of dead tuples within the database.</p>
+
+<p>To remove the dead tuples from the database over time, PostgreSQL provides a mechanism called VACUUM.</p>
+
+<h2 id="vacuum-operation">VACUUM Operation</h2>
+
+<p>Manual Vacuum execution removes the dead tuples from the database. We can execute it at the table level. Unfortunately, manual vacuum execution locks the table and block query execution against the table. And there is no guarantee to evaluate how long it will take to finish this operation. It is not an acceptable scenario for production systems.</p>
+
+<h2 id="autovacuum-operation">AUTOVACUUM Operation</h2>
+
+<p>As you know, databases have internal engines to evaluates the statistics and make decisions. This process is quite evident in the scenario of selecting an execution plan for SQL queries. Databases collect the query execution statistics and, over time, fine-tune the execution plan to make it fast.</p>
+
+<p>In the case of the vacuum process, the database has a lot of statistics in hand. How can we utilize those and automate the vacuum process? The answer to that question is autovacuum.</p>
+
+<p>PostgreSQL provides a bunch of configuration parameters to fine-tune the autovacuum process. By using appropriate values, we can manage to attain more fine-grained, more frequent vacuum execution. You can find a detailed explanation of all available parameters <a href="https://www.postgresql.org/docs/12/runtime-config-autovacuum.html">here</a>.</p>
+
+<p>Let me introduce some of the parameters for autovacuum fine-tuning here with an example. Assume you have a table with thousands of records. You set the configuration parameters as follows. Let’s consider how does it work in this case.</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"> <span class="n">autovacuum_vacuum_threshold</span> <span class="o">=</span> <span class="mi">100</span>
+
+ <span class="n">autovacuum_vacuum_scale_factor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span></code></pre></figure>
+
+<p>The count of obsolete records within your table reaches <em>100+ (0.3 * 1000)</em>, the autovacuum execution will trigger.</p>
+
+<p>Yes, we are all set. Everything is going well.</p>
+
+<p>Do you remember I explained above, manual vacuum locks the table and blocks the query execution against the table? How is the same scenario going to be managed by autovacuum? Autovacuum by design stops execution and exit the process if a query hits the table.</p>
+
+<h2 id="one-potential-problem-scenario">One potential problem scenario</h2>
+
+<p>All are happy the application is running pretty well. On a fine morning, one of the application queries hanged forever. Ultimately the screen is frozen. The application is useless. And interestingly, the screen is interactive for some other set of queries.</p>
+
+<p>That confirms there is no system-wide issue. While researching, you narrow down to the specific query. One possible doubt, the index is corrupted. Analyze the indexes of all the tables part of the SQL query. Did we miss any index to deploy? Did we place the conditional columns in an appropriate order to enhance the performance? Is there any deadlock scenario behind the scene? None of them poped up.</p>
+
+<p>Later we will conclude, all these easy targets are out of luck. We need to check something on a grand scale to nail down this issue. The next two things that came up to mind are table bloating and index bloating. The pgx_scripts <a href="https://github.com/pgexperts/pgx_scripts">repository</a>from pgexperts has some outstanding scripts available to help. That revealed the culprit behind the issue. A table is bloated, which is part of the query we narrow down earlier. And every time we try to execute the query manually, we observed PostgreSQL is canceling the autovacum execution to avoid a table lock. So it was quite obvious, autovacuum configuration is not working for this table.</p>
+
+<h2 id="tablewise-autovacuum-tuning">Tablewise AUTOVACUUM Tuning</h2>
+
+<p>On further investigation, it was quite evident why system-level autovacuum configurations failed to tackle this odd table. It was one of the smallest tables in the database. The total number of records was lesser than <em>autovacuum_vacuum_threshold.</em></p>
+
+<p>You can use the same set of autovacuum parameters with specific values to set the tablewise autovacuum.</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">Ex</span><span class="p">:</span>
+
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">employee</span> <span class="k">SET</span> <span class="p">(</span><span class="n">autovacuum_vacuum_scale_factor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> 
+                           <span class="n">autovacuum_vacuum_threshold</span> <span class="o">=</span> <span class="mi">20</span><span class="p">);</span>
+
+ <span class="c1">--To verify the changes use following query:</span>
+
+<span class="k">select</span> <span class="n">pg_options_to_table</span><span class="p">(</span><span class="n">reloptions</span><span class="p">)</span> <span class="k">from</span> <span class="n">pg_class</span> 
+                                       <span class="k">where</span> <span class="n">relname</span><span class="o">=</span><span class="s1">'employee '</span> <span class="p">;</span>
+
+<span class="n">pg_options_to_table</span>
+
+<span class="c1">--------------------</span>
+
+<span class="n">autovacuum_vacuum_scale_factor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>
+
+<span class="n">autovacuum_vacuum_threshold</span> <span class="o">=</span> <span class="mi">20</span></code></pre></figure>
+:ET

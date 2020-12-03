@@ -77,11 +77,13 @@ You can use the same set of autovacuum parameters with specific values to set th
 {% highlight sql %}
 Ex:
 
- ALTER TABLE employee SET (autovacuum_vacuum_scale_factor = 0.1, autovacuum_vacuum_threshold = 20);
+ALTER TABLE employee SET (autovacuum_vacuum_scale_factor = 0.1, 
+                           autovacuum_vacuum_threshold = 20);
 
-To verify the changes use following query:
+ --To verify the changes use following query:
 
-select pg_options_to_table(reloptions) from pg_class where relname='employee ' ;
+select pg_options_to_table(reloptions) from pg_class 
+                                       where relname='employee ' ;
 
 pg_options_to_table
 
