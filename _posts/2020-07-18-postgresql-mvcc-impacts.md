@@ -49,9 +49,9 @@ PostgreSQL provides a bunch of configuration parameters to fine-tune the autovac
 Let me introduce some of the parameters for autovacuum fine-tuning here with an example. Assume you have a table with thousands of records. You set the configuration parameters as follows. Let's consider how does it work in this case.
 
 {% highlight sql %}
-_autovacuum\_vacuum\_threshold = 100_
+ autovacuum_vacuum_threshold = 100
 
-_autovacuum\_vacuum\_scale\_factor = 0.3_
+ autovacuum_vacuum_scale_factor = 0.3
 
 {% endhighlight %}
 The count of obsolete records within your table reaches _100+ (0.3 \* 1000)_, the autovacuum execution will trigger.
@@ -75,20 +75,20 @@ On further investigation, it was quite evident why system-level autovacuum confi
 You can use the same set of autovacuum parameters with specific values to set the tablewise autovacuum.
 
 {% highlight sql %}
-_Ex:_
+Ex:
 
-_ALTER TABLE employee SET (autovacuum\_vacuum\_scale\_factor = 0.1, autovacuum\_vacuum\_threshold = 20);_
+ ALTER TABLE employee SET (autovacuum_vacuum_scale_factor = 0.1, autovacuum_vacuum_threshold = 20);
 
 To verify the changes use following query:
 
-_select pg\_options\_to\_table(reloptions) from pg\_class where relname='employee ' ;_
+select pg_options_to_table(reloptions) from pg_class where relname='employee ' ;
 
-_pg\_options\_to\_table_
+pg_options_to_table
 
-_--------------------_
+--------------------
 
-_autovacuum\_vacuum\_scale\_factor = 0.1_
+autovacuum_vacuum_scale_factor = 0.1
 
-_autovacuum\_vacuum\_threshold = 20_
+autovacuum_vacuum_threshold = 20
 
 {% endhighlight %}
