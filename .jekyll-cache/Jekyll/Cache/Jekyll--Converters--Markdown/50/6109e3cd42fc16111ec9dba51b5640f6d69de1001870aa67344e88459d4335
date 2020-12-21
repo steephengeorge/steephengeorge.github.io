@@ -1,0 +1,334 @@
+I"a[<h1 id="how-to-set-up-a-kubernetes-development-box">How to set up a Kubernetes development box?</h1>
+
+<p>I am going to set up a kubernetes development environment in a windows box. I am going to use the following technologies/tools for this purpose.</p>
+
+<ol>
+  <li>Windows 10 operating system</li>
+  <li>Minikube</li>
+  <li>Spring-boot</li>
+  <li>Maven</li>
+  <li>Java 11</li>
+  <li>local private registry</li>
+</ol>
+
+<p>I will build a simple Spring-boot application and create a docker image and push it to the container registry. Let’s start !!</p>
+
+<h2 id="set-up-a-minikube">Set up a Minikube</h2>
+
+<p>I am going to use the <a href="https://chocolatey.org/">chocolatey</a>as my deployment tool in windows. If you don’t have choco, install it using PowerShell. Please note. Windows PowerShell is not the usual command prompt.</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">Set-ExecutionPolicy</span><span class="w"> </span><span class="nx">Bypass</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">Process</span><span class="w"> </span><span class="nt">-Force</span><span class="p">;</span><span class="w"> </span><span class="p">[</span><span class="n">System.Net.ServicePointManager</span><span class="p">]::</span><span class="n">SecurityProtocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">System.Net.ServicePointManager</span><span class="p">]::</span><span class="n">SecurityProtocol</span><span class="w"> </span><span class="o">-bor</span><span class="w"> </span><span class="nx">3072</span><span class="p">;</span><span class="w"> </span><span class="n">iex</span><span class="w"> </span><span class="p">((</span><span class="n">New-Object</span><span class="w"> </span><span class="nx">System.Net.WebClient</span><span class="p">)</span><span class="o">.</span><span class="nf">DownloadString</span><span class="p">(</span><span class="s1">'https://chocolatey.org/install.ps1'</span><span class="p">))</span></code></pre></figure>
+
+<p>There are two preconditions before installing Minikube.</p>
+
+<ul>
+  <li>Enable virtualization in BIOS</li>
+  <li>Install Virtual box / Enable Hyper -V</li>
+</ul>
+
+<p>I am using Virtual box. Virtual box is the default virtualization technology using behind Minikube. You can reconfigure for a different VT if you want. We will mention it while discussing the MiniKube configurations.</p>
+
+<p>To install Minikube, it is simple now. Execute on regular Windows command prompt with administrator privilege.</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">choco</span><span class="w"> </span><span class="nx">install</span><span class="w"> </span><span class="nx">minikube</span></code></pre></figure>
+
+<p>To manage the Minikube environment there are 3 commands</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="o">-</span><span class="w"> </span><span class="n">minikube</span><span class="w"> </span><span class="nx">start</span><span class="w">
+</span><span class="o">-</span><span class="w"> </span><span class="n">minikube</span><span class="w"> </span><span class="nx">stop</span><span class="w">
+</span><span class="o">-</span><span class="w"> </span><span class="n">minikube</span><span class="w"> </span><span class="nx">delete</span><span class="w">
+</span><span class="o">-</span><span class="w"> </span><span class="n">minikube</span><span class="w"> </span><span class="nx">status</span></code></pre></figure>
+
+<p>Minikube needs a Virtualbox Manager Command Line Interface(CLI) to start Virtualbox. If you don’t have installed VirtualBox Manager along with VirtualBox make sure to install it. VirtualBox cannot work on another VirtualBox, in a nested manner. So please note we can’t install Minikube in a virtual environment. While starting minikube the first time, if it fails in between, make sure to delete minikube before retrying to start.</p>
+
+<p>To start Minikube executes the command:</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">minikube</span><span class="w"> </span><span class="nx">start</span></code></pre></figure>
+
+<p>To check the status of Minikube executes the command:</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">minikube</span><span class="w"> </span><span class="nx">status</span><span class="w">
+
+</span><span class="o">--------</span><span class="w">
+
+</span><span class="n">minikube</span><span class="w">
+
+</span><span class="kr">type</span><span class="p">:</span><span class="w"> </span><span class="n">Control</span><span class="w"> </span><span class="nx">Plane</span><span class="w">
+
+</span><span class="n">host:</span><span class="w"> </span><span class="nx">Running</span><span class="w">
+
+</span><span class="n">kubelet:</span><span class="w"> </span><span class="nx">Running</span><span class="w">
+
+</span><span class="n">apiserver:</span><span class="w"> </span><span class="nx">Running</span><span class="w">
+
+</span><span class="n">kubeconfig:</span><span class="w"> </span><span class="nx">Configured</span></code></pre></figure>
+
+<p>Now minikube is up and running. We can find the IP address of Minikube using the command:</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">minikube</span><span class="w"> </span><span class="nx">ip</span></code></pre></figure>
+
+<p>If you prefer to log in to the bash shell of minikube, use the command:</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">minikube</span><span class="w"> </span><span class="nx">ssh</span></code></pre></figure>
+
+<p>To access the docker environment of Minikube, you have to move to Powershell. From PowerShell execute the command and follow the instructions within output to point your shell to Minikubes docker-daemon.</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">minikube</span><span class="w"> </span><span class="nx">docker-env</span><span class="w">
+
+</span><span class="o">-----------------</span><span class="w">
+
+</span><span class="o">---</span><span class="w">
+
+</span><span class="c"># To point your shell to minikube's docker-daemon, run:</span><span class="w">
+
+</span><span class="c"># &amp; minikube -p minikube docker-env | Invoke-Expression</span></code></pre></figure>
+
+<p>So we will execute the command to point our shell to docker daemon:</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="o">&amp;</span><span class="w"> </span><span class="n">minikube</span><span class="w"> </span><span class="nt">-p</span><span class="w"> </span><span class="nx">minikube</span><span class="w"> </span><span class="nx">docker-env</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Invoke-Expression</span></code></pre></figure>
+
+<p>Now onwards, when we need to execute a docker command, we have to use this PowerShell. Please note, we didn’t set up a docker environment in our Windows machine. But Minikube set up an internal docker environment, and we are going to use that in our build workflow.</p>
+
+<h2 id="set-up-a-container-registry">Set up a container registry</h2>
+
+<p>Minikube has several add-ons. One of them is the registry. We can enable this add on with the command.</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">minikube</span><span class="w"> </span><span class="nx">addons</span><span class="w"> </span><span class="nx">enable</span><span class="w"> </span><span class="nx">registry</span></code></pre></figure>
+
+<p>It will create a container registry along with the Minikube installation. You can access the registry using a browser:</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">http://</span><span class="w"> </span><span class="err">&lt;</span><span class="nx">minikube-IP</span><span class="w"> </span><span class="err">&gt;</span><span class="p">:</span><span class="nx">5000/v2</span></code></pre></figure>
+
+<p>You will see blank curly braces over the screen.</p>
+
+<p>To access this registry from the Minikube Docker, we need to enable the insecure container registry access from Minikube.</p>
+
+<p>To enable insecure registry access(Don’t worry, you are not leaving your host system!), edit the file by adding the minikube Ip and registry port number and stop and start minikube.</p>
+
+<p>Update the hosts file with registry name</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">C:\Windows\System32\drivers\etc\hosts</span><span class="w">
+
+ </span><span class="err">&lt;</span><span class="n">Minikube</span><span class="w"> </span><span class="nx">IP</span><span class="w"> </span><span class="err">&gt;</span><span class="w"> </span><span class="nx">docker-registry.localdev</span><span class="w">
+
+ </span><span class="err">&lt;</span><span class="n">Minikube</span><span class="w"> </span><span class="nx">IP</span><span class="w"> </span><span class="err">&gt;</span><span class="w"> </span><span class="nx">minikube</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">C:\Users</span><span class="w"> </span><span class="nx">\</span><span class="err">&lt;</span><span class="nx">username</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">\.minikube\machines\minikube\config.json</span><span class="w">
+
+</span><span class="s2">"InsecureRegistry"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+
+</span><span class="s2">"10.96.0.0/12"</span><span class="p">,</span><span class="w"> </span><span class="n">//</span><span class="w"> </span><span class="nx">Add</span><span class="w"> </span><span class="nx">coma</span><span class="w">
+
+</span><span class="s2">"docker-registry.localdev:5000"</span><span class="w"> </span><span class="n">//-\</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">Add</span><span class="w"> </span><span class="nx">this</span><span class="w"> </span><span class="nx">line</span><span class="w">
+
+</span><span class="p">],</span></code></pre></figure>
+
+<p>Stop and start Minikube, now you can access the registry using http as follows:</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">http://docker-registry.localdev:5000/v2</span></code></pre></figure>
+
+<h2 id="build-a-docker-image-for-a-spring-boot-app">Build a Docker image for a Spring-boot app</h2>
+
+<p>Now we will create a simple Spring-boot application. You can go to https://start.spring.io/ and generate a simple web application. The idea is to create a simple REST endpoint using Spring-boot and deploy it within our Minikube.</p>
+
+<p>I am using Spring boot version 2.4.1. that provides the capability to access our Minikube docker environment for building the image. I removed the SNAPSHOT tag from versioning, so I can reuse it to tag my image.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">Pom.xml
+
+ <span class="nt">&lt;parent</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;groupId</span> <span class="nt">&gt;</span>org.springframework.boot <span class="nt">&lt;/groupId &gt;</span>
+
+ <span class="nt">&lt;artifactId</span> <span class="nt">&gt;</span>spring-boot-starter-parent <span class="nt">&lt;/artifactId &gt;</span>
+
+ <span class="nt">&lt;version</span> <span class="nt">&gt;</span>2.4.1 <span class="nt">&lt;/version &gt;</span>
+
+ <span class="nt">&lt;relativePath</span> <span class="nt">/ &gt;</span>  <span class="c">&lt;!-- lookup parent from repository -- &gt;
+
+ &lt;/parent &gt;
+
+ &lt;groupId &gt;com.sm &lt;/groupId &gt;
+
+ &lt;artifactId &gt;collection-service &lt;/artifactId &gt;
+
+ &lt;version &gt;0.0.1 &lt;/version &gt;</span></code></pre></figure>
+
+<p>I am using Java 11. I only added Spring-boot-starter-web and Lombok as a dependency. Lombok library helps us to avoid boilerplate coding.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"> <span class="nt">&lt;properties</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;java.version</span> <span class="nt">&gt;</span>11 <span class="nt">&lt;/java.version &gt;</span>
+
+ <span class="nt">&lt;/properties &gt;</span>
+
+ <span class="nt">&lt;dependencies</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;dependency</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;groupId</span> <span class="nt">&gt;</span>org.springframework.boot <span class="nt">&lt;/groupId &gt;</span>
+
+ <span class="nt">&lt;artifactId</span> <span class="nt">&gt;</span>spring-boot-starter-web <span class="nt">&lt;/artifactId &gt;</span>
+
+ <span class="nt">&lt;/dependency &gt;</span>
+
+ <span class="nt">&lt;dependency</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;groupId</span> <span class="nt">&gt;</span>org.projectlombok <span class="nt">&lt;/groupId &gt;</span>
+
+ <span class="nt">&lt;artifactId</span> <span class="nt">&gt;</span>lombok <span class="nt">&lt;/artifactId &gt;</span>
+
+ <span class="nt">&lt;optional</span> <span class="nt">&gt;</span>true <span class="nt">&lt;/optional &gt;</span>
+
+ <span class="nt">&lt;/dependency &gt;</span>
+
+ <span class="nt">&lt;dependency</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;groupId</span> <span class="nt">&gt;</span>org.springframework.boot <span class="nt">&lt;/groupId &gt;</span>
+
+ <span class="nt">&lt;artifactId</span> <span class="nt">&gt;</span>spring-boot-starter-test <span class="nt">&lt;/artifactId &gt;</span>
+
+ <span class="nt">&lt;scope</span> <span class="nt">&gt;</span>test <span class="nt">&lt;/scope &gt;</span>
+
+ <span class="nt">&lt;/dependency &gt;</span>
+
+ <span class="nt">&lt;/dependencies &gt;</span></code></pre></figure>
+
+<p>In the build component of pom, we can set up the image name. To push the image to the docker-registry. localdev, we need to tag it with the registry name.</p>
+
+<p>Image name holds details as follows:</p>
+
+<container-registry domain="" name="">: <port number="">/ <repository>/ <image name="">: <version tag="">
+
+During the build process, the spring-boot-maven-plugin has a goal spring-boot:build-image to generate the docker image. By default, the build process tries to access the local docker environment. From Spring-boot 2.4.1 onwards we have an option to configure a remote docker set up. We are accessing the Minikube docker environment for our build process. You can see its configuration within node docker.
+
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"> <span class="nt">&lt;build</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;plugins</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;plugin</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;groupId</span> <span class="nt">&gt;</span>org.springframework.boot <span class="nt">&lt;/groupId &gt;</span>
+
+ <span class="nt">&lt;artifactId</span> <span class="nt">&gt;</span>spring-boot-maven-plugin <span class="nt">&lt;/artifactId &gt;</span>
+
+ <span class="nt">&lt;configuration</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;image</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;name</span> <span class="nt">&gt;</span>docker-registry.localdev:5000/sm/${project.artifactId}:${project.version} <span class="nt">&lt;/name &gt;</span>
+
+ <span class="nt">&lt;/image &gt;</span>
+
+ <span class="nt">&lt;docker</span> <span class="nt">&gt;</span>
+
+ <span class="nt">&lt;host</span> <span class="nt">&gt;</span>tcp://minikube:2376 <span class="nt">&lt;/host &gt;</span>
+
+ <span class="nt">&lt;tlsVerify</span> <span class="nt">&gt;</span>true <span class="nt">&lt;/tlsVerify &gt;</span>
+
+ <span class="nt">&lt;certPath</span> <span class="nt">&gt;</span>C:\Users\<span class="nt">&lt;user</span> <span class="err">name</span><span class="nt">&gt;</span>\.minikube certs<span class="nt">&lt;/certPath &gt;</span>
+
+ <span class="nt">&lt;/docker &gt;</span>
+
+ <span class="nt">&lt;/configuration &gt;</span>
+
+ <span class="nt">&lt;/plugin &gt;</span>
+
+ <span class="nt">&lt;/plugins &gt;</span>
+
+ <span class="nt">&lt;/build &gt;</span></code></pre></figure>
+
+
+Spring-boot 2.4.1 by default uses the TLS.1.3 version for secure communication. Build process access to the remote Docker environment is enabled with TLS1.3. But to use the TLS1.3 we need Java 15. Since we are using Java 11 we need to pass the TLS configuration as part of our build process
+
+To generate the image execute the command
+
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">mvn clean spring-boot:build-image <span class="nt">-Djdk</span>.tls.client.protocols<span class="o">=</span>TLSv1.2</code></pre></figure>
+
+
+This will generate an image within the Minikube Docker environment.
+
+Now onwards use the PowerShell to interact with docker and docker-registry. Following steps to push the latest built image to our local private registry.
+
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker images | findstr collection
+
+docker-registry.localdev:5000/sm/collection-service 0.0.1 11e993ec7143 41 years ago 278MB
+
+docker push docker-registry.localdev:5000/sm/collection-service:0.0.1</code></pre></figure>
+
+
+Images are immutable within container registry, so if you try to push the same image with same tag version, push attempt will fail.
+
+## Deploy the app in Minikube
+
+Since our container registry is set up along with Minikube there are not many hurdles to deploying the image to Minikube.
+
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">kubectl create deployment collection-service <span class="nt">--image</span><span class="o">=</span>docker-registry.localdev:5000/sm/collection-service:0.0.1
+
+deployment.apps/collection-service created
+
+C:<span class="se">\U</span>sers<span class="se">\&lt;</span>user name&gt;<span class="se">\&gt;</span>kubectl get pods
+
+NAME READY STATUS RESTARTS AGE
+
+collection-service-fb9f5bb84-ws5x5 1/1 Running 0 7s</code></pre></figure>
+
+
+The pod is the atomic deployment unit within Kubernetes. A pod can contain one or more containers. We can check the logs to make sure our deployment is successful or not.
+
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">C:<span class="se">\U</span>sers<span class="se">\&lt;</span>user name&gt;<span class="se">\&gt;</span>kubectl logs collection-service-fb9f5bb84-ws5x5
+
+Setting Active Processor Count to 4
+
+Calculating JVM memory based on 1297600K available memory
+
+Calculated JVM Memory Configuration: <span class="nt">-XX</span>:MaxDirectMemorySize<span class="o">=</span>10M <span class="nt">-Xmx703177K</span> <span class="nt">-XX</span>:MaxMetaspaceSize<span class="o">=</span>82422K <span class="nt">-XX</span>:ReservedCodeCacheSize<span class="o">=</span>240M <span class="nt">-Xss1M</span> <span class="o">(</span>Total Memory: 1297600K, Thread Count: 250, Loaded Class Count: 12138, Headroom: 0%<span class="o">)</span>
+
+Adding 138 container CA certificates to JVM truststore
+
+Spring Cloud Bindings Enabled
+
+Picked up JAVA<span class="se">\_</span>TOOL<span class="se">\_</span>OPTIONS: <span class="nt">-Djava</span>.security.properties<span class="o">=</span>/layers/paketo-buildpacks<span class="se">\_</span>bellsoft-liberica/java-security-properties/java-security.properties <span class="nt">-agentpath</span>:/layers/paketo-buildpacks<span class="se">\_</span>bellsoft-liberica/jvmkill/jvmkill-1.16.0-RELEASE.so<span class="o">=</span><span class="nv">printHeapHistogram</span><span class="o">=</span>1 <span class="nt">-XX</span>:ActiveProcessorCount<span class="o">=</span>4 <span class="nt">-XX</span>:MaxDirectMemorySize<span class="o">=</span>10M <span class="nt">-Xmx703177K</span> <span class="nt">-XX</span>:MaxMetaspaceSize<span class="o">=</span>82422K <span class="nt">-XX</span>:ReservedCodeCacheSize<span class="o">=</span>240M <span class="nt">-Xss1M</span> <span class="nt">-Dorg</span>.springframework.cloud.bindings.boot.enable<span class="o">=</span><span class="nb">true</span>
+
+<span class="nb">.</span> <span class="se">\_\_\_\_</span> <span class="se">\_</span> <span class="se">\_\_</span> <span class="se">\_</span> <span class="se">\_</span>
+
+/<span class="se">\\</span> / <span class="se">\_\_\_</span><span class="s1">'\_ \_\_ \_ \_(\_)\_ \_\_ \_\_ \_ \ \ \ \
+
+( ( )\_\_\_ | '</span><span class="se">\_</span> | <span class="s1">'\_| | '</span><span class="se">\_</span> <span class="se">\/</span> <span class="se">\_</span><span class="sb">`</span> | <span class="se">\ \ \ \</span>
+
+<span class="se">\\</span>/ <span class="se">\_\_\_</span><span class="o">)</span>| |<span class="se">\_</span><span class="o">)</span>| | | | | <span class="o">||</span> <span class="o">(</span><span class="se">\_</span>| | <span class="o">)</span> <span class="o">)</span> <span class="o">)</span> <span class="o">)</span>
+
+<span class="s1">' |\_\_\_\_| .\_\_|\_| |\_|\_| |\_\_\_, | / / / /
+
+=========|\_|==============|\_\_\_/=/\_/\_/\_/
+
+:: Spring Boot :: (v2.4.1)
+
+2020-12-21 06:36:48.363 INFO 1 --- [main] c.s.c.CollectionServiceApplication : Starting CollectionServiceApplication v0.0.1 using Java 11.0.9.1 on collection-service-fb9f5bb84-ws5x5 with PID 1 (/workspace/BOOT-INF/classes started by cnb in /workspace)
+
+2020-12-21 06:36:48.367 INFO 1 --- [main] c.s.c.CollectionServiceApplication : No active profile set, falling back to default profiles: default
+
+2020-12-21 06:36:49.747 INFO 1 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer : Tomcat initialized with port(s): 8080 (http)
+
+2020-12-21 06:36:49.766 INFO 1 --- [main] o.apache.catalina.core.StandardService : Starting service [Tomcat]
+
+2020-12-21 06:36:49.767 INFO 1 --- [main] org.apache.catalina.core.StandardEngine : Starting Servlet engine: [Apache Tomcat/9.0.41]
+
+2020-12-21 06:36:49.855 INFO 1 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/] : Initializing Spring embedded WebApplicationContext
+
+2020-12-21 06:36:49.856 INFO 1 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1381 ms
+
+2020-12-21 06:36:50.250 INFO 1 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor : Initializing ExecutorService '</span>applicationTaskExecutor<span class="s1">'
+
+2020-12-21 06:36:50.513 INFO 1 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer : Tomcat started on port(s): 8080 (http) with context path ''
+
+2020-12-21 06:36:50.529 INFO 1 --- [main] c.s.c.CollectionServiceApplication : Started CollectionServiceApplication in 2.8 seconds (JVM running for 3.438)</span></code></pre></figure>
+
+
+Looks good!! Service is up and running. But it is not accessible now. To Make a service accessible, we need to expose it. We will look into that aspects in another article.
+</version></image></repository></port></container-registry>
+:ET
