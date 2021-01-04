@@ -1,4 +1,4 @@
-I"a[<h1 id="how-to-set-up-a-kubernetes-development-box">How to set up a Kubernetes development box?</h1>
+I"Â[<h1 id="how-to-set-up-a-kubernetes-development-box">How to set up a Kubernetes development box?</h1>
 
 <p>I am going to set up a kubernetes development environment in a windows box. I am going to use the following technologies/tools for this purpose.</p>
 
@@ -330,5 +330,7 @@ Picked up JAVA<span class="se">\_</span>TOOL<span class="se">\_</span>OPTIONS: <
 
 
 Looks good!! Service is up and running. But it is not accessible now. To Make a service accessible, we need to expose it. We will look into that aspects in another article.
+
+Refer code [here]: (https://github.com/steephengeorge/experiments/tree/main/collection-service)
 </version></image></repository></port></container-registry>
 :ET
