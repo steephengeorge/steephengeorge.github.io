@@ -1,0 +1,88 @@
+I"�<h2 id="inter-service-communication-within-kubernetes">Inter-service communication within Kubernetes</h2>
+
+<p>In a previous article <a href="https://soulmeadows.com/kubernetes/2018/01/22/route-using-gateway.html">Route using Spring Cloud Gateway</a>, I have explained how to use Spring cloud Gateway to route the endpoints to different services using ‘path’ as a predicate. Here I am planning to do the same within a Minikube cluster.</p>
+
+<p>In the article, <a href="https://soulmeadows.com/kubernetes/2018/01/11/deploy-expose-k8s-service.html">How to deploy and expose a service using Minikube?</a> I explained how did I deploy register-service. I just followed the same process for another service called search-service. So we have two different services up and running in Minikube.</p>
+
+<p>In search-service we have a REST endpoint to return the preferences</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@RestController</span>
+
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/searchSvc/api"</span><span class="o">)</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">preferenceController</span> <span class="o">{</span>
+
+<span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/preferences"</span><span class="o">)</span>
+
+<span class="kd">public</span> <span class="nc">List</span><span class="err">\</span><span class="o">&lt;</span><span class="nc">String</span><span class="err">\</span><span class="o">&gt;</span> <span class="n">getPreferences</span><span class="o">(){</span>
+
+<span class="k">return</span> <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"reading"</span><span class="o">,</span> <span class="s">"music"</span><span class="o">);</span>
+
+<span class="o">}</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="se">\&gt;</span> kubectl get po
+
+register-service-57495f79fb-z5djj 1/1 Running 5 2d5h
+
+search-service-67fbcf546f-fkm6d 1/1 Running 5 44h</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="se">\&gt;</span> kubectl get svc
+
+register-service ClusterIP 10.105.89.134 <span class="se">\&lt;</span>none<span class="se">\&gt;</span> 9095/TCP 2d5h
+
+search-service ClusterIP 10.106.96.97 <span class="se">\&lt;</span>none<span class="se">\&gt;</span> 9096/TCP 45h</code></pre></figure>
+
+<p>Even though we didn’t create endpoint objects directly for these services, the Minikube cluster generated those for us. This data point is pretty interesting to watch when we change the replicas of a service.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="se">\&gt;</span> kubectl get ep
+
+register-service 172.17.0.15:9095 2d5h
+
+search-service 172.17.0.17:9096 45h</code></pre></figure>
+
+<p>The values of the following parameters are different for gateway service while deploying in the Minikube cluster. The parameter ‘URI’ holds the service name rather than the host IP address. To deploy the gateway-service, follow the same step we did for the other two services.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">server.port<span class="o">=</span>9097
+
+spring.cloud.gateway.routes[0].uri <span class="o">=</span> http://search-service:9096
+
+spring.cloud.gateway.routes[1].uri <span class="o">=</span> http://register-service:9095
+
+spring.cloud.kubernetes.discovery.all-namespaces<span class="o">=</span><span class="nb">true
+
+</span>spring.cloud.kubernetes.config.namespace<span class="o">=</span>all</code></pre></figure>
+
+<p>Since we are running the gateway service on port 9097 as a clusterip service, we can do a port forwarding on Minikube</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">kubectl port-forward service/gateway-service 9097:9097
+
+Forwarding from 127.0.0.1:9097 -<span class="se">\&gt;</span> 9097
+
+Forwarding from <span class="o">[</span>::1]:9097 -<span class="se">\&gt;</span> 9097</code></pre></figure>
+
+<p>Now by using Postman, we can access register-service endpoint as well as search-service endpoint through gateway-service.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">http</span><span class="p">:</span><span class="c1">//localhost:9097/registerSvc/api/address</span>
+
+<span class="nx">Address1</span>
+
+<span class="nx">http</span><span class="p">:</span><span class="c1">//localhost:9097/searchSvc/api/preferences</span>
+
+<span class="p">[</span>
+
+<span class="dl">"</span><span class="s2">reading</span><span class="dl">"</span><span class="p">,</span>
+
+<span class="dl">"</span><span class="s2">music</span><span class="dl">"</span>
+
+<span class="p">]</span></code></pre></figure>
+
+<p>You can find all code in GitHub:</p>
+
+<ul>
+  <li><a href="https://github.com/steephengeorge/experiments/tree/main/search-service">search-service</a></li>
+  <li><a href="https://github.com/steephengeorge/experiments/tree/main/register-service">register-service</a></li>
+  <li><a href="https://github.com/steephengeorge/experiments/tree/main/gateway-service">gateway-service</a></li>
+</ul>
+:ET
