@@ -6,7 +6,7 @@ date: 2018-01-11 14:15:00
 categories: kubernetes
 tags: Software Java Kubernetes Spring-Boot
 lead_text: "I will create a spring-boot service and show how to deploy it in a Minikube cluster. As usual, I created a prototype using Spring starter and included the Spring web starter dependency. I have chosen the Spring-Boot version 2.3.7.RELEASE to make sure to avoid the compatibility issues raise when I try to deploy in Minikube."
-project_link: 'http://steephengeorge.github.io/kubernetes/2018/01/11/deploy-expose-k8s-service.html'
+project_link: 'http://localhost:4000/kubernetes/2018/01/11/deploy-expose-k8s-service.html'
 ---
 # How to deploy and expose a service using Minikube?
 

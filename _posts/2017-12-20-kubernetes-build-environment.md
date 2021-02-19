@@ -6,7 +6,7 @@ date: 2017-12-20 14:15:00
 categories: kubernetes
 tags: Software Java Kubernetes Spring-Boot
 lead_text: "I am going to set up a kubernetes development environment in a windows box. I am going to use the following technologies/tools for this purpose: Minikube, Docker Container registry, Spring-Boot, Java 11. I will build a simple Spring-boot application and create a docker image and push it to the container registry. Let's start !!"
-project_link: 'http://steephengeorge.github.io/kubernetes/2017/12/20/kubernetes_build_environment.html'
+project_link: 'http://localhost:4000/kubernetes/2017/12/20/kubernetes-build-environment.html'
 ---
 
 # How to set up a Kubernetes development box?
