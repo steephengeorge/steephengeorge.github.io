@@ -1,4 +1,4 @@
-I"�<h2 id="inter-service-communication-within-kubernetes">Inter-service communication within Kubernetes</h2>
+I"<h2 id="part-4-inter-service-communication-within-kubernetes">Part-4: Inter-service communication within Kubernetes</h2>
 
 <p>In a previous article <a href="https://soulmeadows.com/kubernetes/2018/01/22/route-using-gateway.html">Route using Spring Cloud Gateway</a>, I have explained how to use Spring cloud Gateway to route the endpoints to different services using ‘path’ as a predicate. Here I am planning to do the same within a Minikube cluster.</p>
 

@@ -1,0 +1,129 @@
+I"€<h1 id="statefulset-deployment-of-elasticsearch">StatefulSet deployment of ElasticSearch</h1>
+
+<p>In current system, now we have stateless services like search and register services. Stateless is kind of a lauded word, in simple sense these services do not hold any specific state of the system. These services are built on top of REST(Representational State Transfer) protocol. Setting up stateless services on Kubernetes platform is already explained so far. In this article, I will try to capture what need to be done to deploy a StatefulSet component.</p>
+
+<p>Databases need to maintain the state in storage. While deploying databases on Kubernetes platform, we can decouple the storage layer with service layer and statically link the same storage layer with multiple database services. This way system can manage the statefulness of database. PersistenceVolumeClaim is the Kubernetes Object to manage the storage.</p>
+
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">kind</span><span class="pi">:</span> <span class="s">PersistentVolumeClaim</span>
+
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+
+<span class="na">metadata</span><span class="pi">:</span>
+
+<span class="na">name</span><span class="pi">:</span> <span class="s">elastic-search-volumeclaim</span>
+
+<span class="na">annotations</span><span class="pi">:</span>
+
+<span class="s">volume.beta.kubernetes.io/storage-class</span><span class="pi">:</span> <span class="s">standard</span>
+
+<span class="na">spec</span><span class="pi">:</span>
+
+<span class="na">accessModes</span><span class="pi">:</span>
+
+<span class="pi">-</span> <span class="s">ReadWriteOnce</span>
+
+<span class="na">resources</span><span class="pi">:</span>
+
+<span class="na">requests</span><span class="pi">:</span>
+
+<span class="na">storage</span><span class="pi">:</span> <span class="s">4Gi</span></code></pre></figure>
+
+<p>Then, I will create a StatefulSet and link the PersistenceVolumeClaim. Since we are planning to deploy on Minikube, I created a volume mount.</p>
+
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
+
+<span class="na">kind</span><span class="pi">:</span> <span class="s">StatefulSet</span>
+
+<span class="na">metadata</span><span class="pi">:</span>
+
+<span class="na">name</span><span class="pi">:</span> <span class="s">elasticsearch</span>
+
+<span class="na">spec</span><span class="pi">:</span>
+
+<span class="na">serviceName</span><span class="pi">:</span> <span class="s2">"</span><span class="s">elasticsearch"</span>
+
+<span class="na">replicas</span><span class="pi">:</span> <span class="m">1</span>
+
+<span class="na">selector</span><span class="pi">:</span>
+
+<span class="na">matchLabels</span><span class="pi">:</span>
+
+<span class="na">app</span><span class="pi">:</span> <span class="s">elasticsearch</span>
+
+<span class="na">template</span><span class="pi">:</span>
+
+<span class="na">metadata</span><span class="pi">:</span>
+
+<span class="na">labels</span><span class="pi">:</span>
+
+<span class="na">app</span><span class="pi">:</span> <span class="s">elasticsearch</span>
+
+<span class="na">spec</span><span class="pi">:</span>
+
+<span class="na">containers</span><span class="pi">:</span>
+
+<span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">elasticsearch</span>
+
+<span class="na">image</span><span class="pi">:</span> <span class="s">docker.elastic.co/elasticsearch/elasticsearch:7.10.1</span>
+
+<span class="na">env</span><span class="pi">:</span>
+
+<span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">discovery.type</span>
+
+<span class="na">value</span><span class="pi">:</span> <span class="s">single-node</span>
+
+<span class="na">ports</span><span class="pi">:</span>
+
+<span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="m">9200</span>
+
+<span class="na">name</span><span class="pi">:</span> <span class="s">client</span>
+
+<span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="m">9300</span>
+
+<span class="na">name</span><span class="pi">:</span> <span class="s">nodes</span>
+
+<span class="na">volumeMounts</span><span class="pi">:</span>
+
+<span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">es-storage</span>
+
+<span class="na">mountPath</span><span class="pi">:</span> <span class="s">/var/lib/es</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+
+<span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">es-storage</span>
+
+<span class="na">persistentVolumeClaim</span><span class="pi">:</span>
+
+<span class="na">claimName</span><span class="pi">:</span> <span class="s">elastic-search-volumeclaim</span></code></pre></figure>
+
+<p>I created a service to expose the ElasticSearch Database.</p>
+
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Service</span>
+
+<span class="na">metadata</span><span class="pi">:</span>
+
+<span class="na">name</span><span class="pi">:</span> <span class="s">elasticsearch</span>
+
+<span class="na">labels</span><span class="pi">:</span>
+
+<span class="na">service</span><span class="pi">:</span> <span class="s">elasticsearch</span>
+
+<span class="na">spec</span><span class="pi">:</span>
+
+<span class="na">ports</span><span class="pi">:</span>
+
+<span class="pi">-</span> <span class="na">port</span><span class="pi">:</span> <span class="m">9200</span>
+
+<span class="na">name</span><span class="pi">:</span> <span class="s">client</span>
+
+<span class="pi">-</span> <span class="na">port</span><span class="pi">:</span> <span class="m">9300</span>
+
+<span class="na">name</span><span class="pi">:</span> <span class="s">nodes</span>
+
+<span class="na">selector</span><span class="pi">:</span>
+
+<span class="na">app</span><span class="pi">:</span> <span class="s">elasticsearch</span></code></pre></figure>
+
+:ET

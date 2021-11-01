@@ -1,4 +1,4 @@
-I"eI<h1 id="how-to-deploy-and-expose-a-service-using-minikube">How to deploy and expose a service using Minikube?</h1>
+I"tI<h1 id="part-2-how-to-deploy-and-expose-a-service-using-minikube">Part-2: How to deploy and expose a service using Minikube?</h1>
 
 <p>Refer to the previous <a href="https://soulmeadows.com/kubernetes/2017/12/20/kubernetes_build_environment.html">article</a> to find how to set up the Kubernetes local build environment in the development box.</p>
 

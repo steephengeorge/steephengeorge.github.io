@@ -1,4 +1,4 @@
-I"Â[<h1 id="how-to-set-up-a-kubernetes-development-box">How to set up a Kubernetes development box?</h1>
+I"Ý]<h1 id="part-1-how-to-set-up-a-kubernetes-development-box">Part-1: How to set up a Kubernetes development box?</h1>
 
 <p>I am going to set up a kubernetes development environment in a windows box. I am going to use the following technologies/tools for this purpose.</p>
 
@@ -197,10 +197,11 @@
 
 <p>Image name holds details as follows:</p>
 
-<container-registry domain="" name="">: <port number="">/ <repository>/ <image name="">: <version tag="">
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"> <span class="nt">&lt;container-registry</span> <span class="err">domain</span> <span class="err">name</span> <span class="nt">&gt;</span>: <span class="nt">&lt;port</span> <span class="err">number</span> <span class="nt">&gt;</span>/ <span class="nt">&lt;repository</span> <span class="nt">&gt;</span>/ <span class="nt">&lt;image</span> <span class="err">name</span> <span class="nt">&gt;</span>: <span class="nt">&lt;version</span> <span class="err">tag</span> <span class="nt">&gt;</span>
+ 
+ </code></pre></figure>
 
-During the build process, the spring-boot-maven-plugin has a goal spring-boot:build-image to generate the docker image. By default, the build process tries to access the local docker environment. From Spring-boot 2.4.1 onwards we have an option to configure a remote docker set up. We are accessing the Minikube docker environment for our build process. You can see its configuration within node docker.
-
+<p>During the build process, the spring-boot-maven-plugin has a goal spring-boot:build-image to generate the docker image. By default, the build process tries to access the local docker environment. From Spring-boot 2.4.1 onwards we have an option to configure a remote docker set up. We are accessing the Minikube docker environment for our build process. You can see its configuration within node docker.</p>
 
 <figure class="highlight"><pre><code class="language-xml" data-lang="xml"> <span class="nt">&lt;build</span> <span class="nt">&gt;</span>
 
@@ -238,19 +239,15 @@ During the build process, the spring-boot-maven-plugin has a goal spring-boot:bu
 
  <span class="nt">&lt;/build &gt;</span></code></pre></figure>
 
+<p>Spring-boot 2.4.1 by default uses the TLS.1.3 version for secure communication. Build process access to the remote Docker environment is enabled with TLS1.3. But to use the TLS1.3 we need Java 15. Since we are using Java 11 we need to pass the TLS configuration as part of our build process</p>
 
-Spring-boot 2.4.1 by default uses the TLS.1.3 version for secure communication. Build process access to the remote Docker environment is enabled with TLS1.3. But to use the TLS1.3 we need Java 15. Since we are using Java 11 we need to pass the TLS configuration as part of our build process
-
-To generate the image execute the command
-
+<p>To generate the image execute the command</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">mvn clean spring-boot:build-image <span class="nt">-Djdk</span>.tls.client.protocols<span class="o">=</span>TLSv1.2</code></pre></figure>
 
+<p>This will generate an image within the Minikube Docker environment.</p>
 
-This will generate an image within the Minikube Docker environment.
-
-Now onwards use the PowerShell to interact with docker and docker-registry. Following steps to push the latest built image to our local private registry.
-
+<p>Now onwards use the PowerShell to interact with docker and docker-registry. Following steps to push the latest built image to our local private registry.</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker images | findstr collection
 
@@ -258,13 +255,11 @@ docker-registry.localdev:5000/sm/collection-service 0.0.1 11e993ec7143 41 years 
 
 docker push docker-registry.localdev:5000/sm/collection-service:0.0.1</code></pre></figure>
 
+<p>Images are immutable within container registry, so if you try to push the same image with same tag version, push attempt will fail.</p>
 
-Images are immutable within container registry, so if you try to push the same image with same tag version, push attempt will fail.
+<h2 id="deploy-the-app-in-minikube">Deploy the app in Minikube</h2>
 
-## Deploy the app in Minikube
-
-Since our container registry is set up along with Minikube there are not many hurdles to deploying the image to Minikube.
-
+<p>Since our container registry is set up along with Minikube there are not many hurdles to deploying the image to Minikube.</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">kubectl create deployment collection-service <span class="nt">--image</span><span class="o">=</span>docker-registry.localdev:5000/sm/collection-service:0.0.1
 
@@ -276,9 +271,7 @@ NAME READY STATUS RESTARTS AGE
 
 collection-service-fb9f5bb84-ws5x5 1/1 Running 0 7s</code></pre></figure>
 
-
-The pod is the atomic deployment unit within Kubernetes. A pod can contain one or more containers. We can check the logs to make sure our deployment is successful or not.
-
+<p>The pod is the atomic deployment unit within Kubernetes. A pod can contain one or more containers. We can check the logs to make sure our deployment is successful or not.</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">C:<span class="se">\U</span>sers<span class="se">\&lt;</span>user name&gt;<span class="se">\&gt;</span>kubectl logs collection-service-fb9f5bb84-ws5x5
 
@@ -328,9 +321,7 @@ Picked up JAVA<span class="se">\_</span>TOOL<span class="se">\_</span>OPTIONS: <
 
 2020-12-21 06:36:50.529 INFO 1 --- [main] c.s.c.CollectionServiceApplication : Started CollectionServiceApplication in 2.8 seconds (JVM running for 3.438)</span></code></pre></figure>
 
+<p>Looks good!! Service is up and running. But it is not accessible now. To Make a service accessible, we need to expose it. We will look into that aspects in another article.</p>
 
-Looks good!! Service is up and running. But it is not accessible now. To Make a service accessible, we need to expose it. We will look into that aspects in another article.
-
-Refer code [here]: (https://github.com/steephengeorge/experiments/tree/main/collection-service)
-</version></image></repository></port></container-registry>
+<p>Refer code [here]: (https://github.com/steephengeorge/experiments/tree/main/collection-service)</p>
 :ET

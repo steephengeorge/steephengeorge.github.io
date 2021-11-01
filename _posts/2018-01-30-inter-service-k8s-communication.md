@@ -9,7 +9,7 @@ lead_text: "In a previous article Route using Spring Cloud Gateway, I have expla
 project_link: 'http://steephengeorge.github.io/kubernetes/2018/01/30/inter-service-k8s-communication.html'
 ---
 
-## Inter-service communication within Kubernetes
+## Part-4: Inter-service communication within Kubernetes
 
 In a previous article [Route using Spring Cloud Gateway](https://soulmeadows.com/kubernetes/2018/01/22/route-using-gateway.html), I have explained how to use Spring cloud Gateway to route the endpoints to different services using 'path' as a predicate. Here I am planning to do the same within a Minikube cluster.
 

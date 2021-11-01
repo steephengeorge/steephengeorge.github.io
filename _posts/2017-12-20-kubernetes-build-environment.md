@@ -9,7 +9,7 @@ lead_text: "I am going to set up a kubernetes development environment in a windo
 project_link: 'http://localhost:4000/kubernetes/2017/12/20/kubernetes-build-environment.html'
 ---
 
-# How to set up a Kubernetes development box?
+# Part-1: How to set up a Kubernetes development box?
 
 I am going to set up a kubernetes development environment in a windows box. I am going to use the following technologies/tools for this purpose.
 
@@ -267,8 +267,11 @@ I am using Java 11. I only added Spring-boot-starter-web and Lombok as a depende
 In the build component of pom, we can set up the image name. To push the image to the docker-registry. localdev, we need to tag it with the registry name.
 
 Image name holds details as follows:
+{% highlight xml %}
 
  <container-registry domain name >: <port number >/ <repository >/ <image name >: <version tag >
+ 
+ {% endhighlight %}
 
 During the build process, the spring-boot-maven-plugin has a goal spring-boot:build-image to generate the docker image. By default, the build process tries to access the local docker environment. From Spring-boot 2.4.1 onwards we have an option to configure a remote docker set up. We are accessing the Minikube docker environment for our build process. You can see its configuration within node docker.
 

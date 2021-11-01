@@ -9,7 +9,7 @@ lead_text: "Spring Cloud Gateway is one of the components in the Spring Cloud fr
 project_link: 'http://steephengeorge.github.io/kubernetes/2018/01/22/route-using-gateway.html'
 ---
 
-# Route using Spring Cloud Gateway
+# Part-3: Route using Spring Cloud Gateway
 
 Spring Cloud Gateway is one of the components in the Spring Cloud framework. Here we will figure out how to route the REST traffic to different service endpoints using Spring Cloud Gateway. In most examples, I have seen following the same practice of using the application.yml file to set up configurations as shown in Spring documentation. I will initially set it up using YAML then I will convert it into old fashion application. properties. This may be useful to generate a Kubernetes configMap because configMap generation utilities are available to generate it from a conventional application.properties file.
 
