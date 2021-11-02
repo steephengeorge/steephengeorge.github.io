@@ -6,7 +6,7 @@ date: 2018-02-08 14:15:00
 categories: kubernetes
 tags: Kubernetes StatefulSet ElasticSearch
 lead_text: "Databases need to maintain the state in storage. While deploying databases on Kubernetes platform, we can decouple the storage layer with service layer and statically link the same storage layer with multiple database services."
-project_link: 'http://steephengeorge.github.com/kubernetes/2018/02/08/StatefulSet-Databases-deployment.html'
+project_link: 'http://steephengeorge.github.io/kubernetes/2018/02/08/StatefulSet-Databases-deployment.html'
 ---
 
 # StatefulSet deployment of ElasticSearch

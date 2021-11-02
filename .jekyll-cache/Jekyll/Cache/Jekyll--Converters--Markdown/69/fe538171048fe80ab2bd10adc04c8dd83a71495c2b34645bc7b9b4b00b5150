@@ -1,0 +1,118 @@
+I"ç<h1 id="java-langauge-feature-abuses">Java Langauge Feature Abuses</h1>
+
+<p>If you can successfully compile and run, your program is syntactically
+correct. But if it is semantically wrong, you may be abusing the
+language constructs. Below I am trying to explain two of such language
+abuses, that I read somewhere coincidently.</p>
+
+<h2 id="misuse-of-concurrency-constructs">Misuse of concurrency constructs</h2>
+
+<p>I have to add integers from a list to an already known value. I can
+tackle it in several ways.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//By using a range loop</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="nc">Integer</span> <span class="nf">adder</span><span class="o">(</span><span class="nc">List</span><span class="err">\</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="err">\</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+
+	<span class="nc">Integer</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+
+	<span class="k">for</span><span class="o">(</span><span class="nc">Integer</span> <span class="nl">number:</span> <span class="n">numbers</span><span class="o">){</span>
+
+	<span class="n">sum</span> <span class="o">+=</span> <span class="n">number</span><span class="o">;</span>
+
+	<span class="o">}</span>
+
+	<span class="k">return</span> <span class="n">sum</span><span class="o">;</span>
+
+<span class="o">}</span>
+
+<span class="c1">//By using lambda with reduce function</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="nc">Integer</span> <span class="nf">adder</span><span class="o">(</span><span class="nc">List</span><span class="err">\</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="err">\</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+
+	<span class="nc">Integer</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+
+	<span class="n">sum</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="na">stream</span><span class="o">().</span><span class="na">reduce</span><span class="o">(</span><span class="n">sum</span><span class="o">,</span> <span class="nl">Integer:</span><span class="o">:*</span><span class="n">sum</span><span class="o">*);</span>
+
+	<span class="k">return</span> <span class="n">sum</span><span class="o">;</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<p>These are all good. But see the next version.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="nc">Integer</span> <span class="nf">adder</span><span class="o">(</span><span class="nc">List</span><span class="err">\</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="err">\</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+
+	<span class="nc">Integer</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+
+	<span class="n">numbers</span><span class="o">.</span><span class="na">stream</span><span class="o">().</span><span class="na">forEach</span><span class="o">(</span><span class="n">number</span> <span class="o">-</span><span class="err">\</span><span class="o">&gt;</span>
+
+		<span class="n">sum</span> <span class="o">+=</span> <span class="n">number</span> <span class="o">);</span>
+
+	<span class="k">return</span> <span class="n">sum</span><span class="o">;</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<p>I will get the following error:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">java: <span class="nb">local </span>variables referenced from a lambda expression must be final
+or effectively final</code></pre></figure>
+
+<p>I can solve this error by abusing the language as follows.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="nc">Integer</span> <span class="nf">adder</span><span class="o">(</span><span class="nc">List</span><span class="err">\</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="err">\</span><span class="o">&gt;</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+
+	<span class="nc">AtomicInteger</span> <span class="n">sum</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AtomicInteger</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+
+	<span class="n">numbers</span><span class="o">.</span><span class="na">stream</span><span class="o">().</span><span class="na">forEach</span><span class="o">(</span><span class="n">number</span> <span class="o">-</span><span class="err">\</span><span class="o">&gt;</span>
+
+		<span class="n">sum</span><span class="o">.</span><span class="na">addAndGet</span><span class="o">(</span><span class="n">number</span><span class="o">));</span>
+
+	<span class="k">return</span> <span class="n">sum</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<p>Someone who reviews this code should ask at least two questions:</p>
+
+<ul>
+  <li>
+    <p>Is concurrency in play in this context?</p>
+  </li>
+  <li>
+    <p>Are we using the appropriate language construct to tackle the problem?</p>
+  </li>
+</ul>
+
+<p>If there is no concurrent scenario in the context, AtomicInteger is
+overkill as well as language abuse. Did you see this kind of code
+somewhere?</p>
+
+<h2 id="atomicboolean-is-not-your-toy">AtomicBoolean is not your toy!!</h2>
+
+<p>AtomicBoolean is different from Boolean only in one regard the
+operations we can do on AtomicBoolean is atomic at the hardware level.
+Atomic operations can generate results by executing a single hardware
+instruction.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">updateCurrentStatus</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">leftStatus</span><span class="o">,</span>
+
+<span class="kt">boolean</span> <span class="n">rightStatus</span><span class="o">){</span>
+
+	<span class="nc">AtomicBoolean</span> <span class="n">currentStatus</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AtomicBoolean</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+	<span class="n">currentStatus</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">leftStatus</span> <span class="err">\</span><span class="o">|</span><span class="err">\</span><span class="o">|</span> <span class="n">rightStatus</span><span class="o">);</span>
+
+	<span class="k">return</span> <span class="n">currentStatus</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<p>The above code snippet successfully compiles and gives you a result, but
+it is not semantically right.</p>
+
+<p>The normal boolean operations OR or AND are not atomic. In the above
+code snippet, we packed the normal boolean operations within the
+parameter of set operation for AtomicBoolean. So we are mixing a
+non-atomic operation inappropriately with an atomic variable. It is a
+code smell. My gut feeling is, you don't need AtomicBoolean in this
+context. If you argue on thread safety, simpy this snippet is neither
+thread-safe nor atomic.</p>
+:ET
