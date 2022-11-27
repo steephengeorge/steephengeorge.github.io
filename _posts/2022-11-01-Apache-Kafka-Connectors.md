@@ -6,10 +6,12 @@ date: 2022-11-01 14:15:00
 categories: Apache-Kafka 
 tags: Apache-Kafka Kafka-Connect
 lead_text: "Apache Kafka connector ecosystem is an integration layer with different systems and Apache Kafka. Connectors are categorized as sink and source connectors. Sink connectors move data from Apache Kafka to other data stores like databases and cloud storage solutions like Amazon Simple Storage Service(s3). Source connectors move data from external systems to Apache Kafka."
-project_link: 'http://steephengeorge.github.io/Apache-Kafka/2022/11/01/Apache-Kafka-Connectors.html'
+project_link: 'http://steephengeorge.github.io/apache-kafka/2022/11/01/Apache-Kafka-Connectors.html'
 ---
 
 #  Apache Kafka Connectors
+
+
 
 Apache Kafka connector ecosystem is an integration layer with different
 systems and Apache Kafka. Connectors are categorized as sink and source
